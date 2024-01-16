@@ -49,19 +49,9 @@ func PostIndexForm(c *gin.Context) {
 func RedirectIndexControlller(c *gin.Context) {
 	url := path.Join("exmpl.cm", c.Param("urlId"))
 	var redirectTo string
+	csvReader := CsvReader{filename: "data/data.csv"}
 
-	file, err := os.OpenFile("data/data.csv", os.O_RDONLY, 0777)
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer file.Close()
-
-	csvReader := csv.NewReader(file)
-
-	records, err := csvReader.ReadAll()
-	if err != nil {
-		fmt.Println(err)
-	}
+	records := csvReader.ReadCsv()
 
 	for i := 0; i < len(records); i++ {
 		for j := 0; j < len(records[i]); j++ {
@@ -95,18 +85,9 @@ func generateShortURL() string {
 }
 
 func checkDuplicates(record []string) bool {
-	file, err := os.Open("data/data.csv")
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer file.Close()
+	csvReader := CsvReader{filename: "data/data.csv"}
 
-	csvReader := csv.NewReader(file)
-
-	fields, err := csvReader.ReadAll()
-	if err != nil {
-		fmt.Println(err)
-	}
+	fields := csvReader.ReadCsv()
 
 	if len(fields) > 0 {
 		for i := 0; i < len(fields); i++ {

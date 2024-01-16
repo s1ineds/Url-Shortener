@@ -15,5 +15,8 @@ func main() {
 	router.POST("/index", controllers.PostIndexForm)
 	router.GET("/:urlId", controllers.RedirectIndexControlller)
 
+	router.GET("/api/getUrls", controllers.GetUrls)
+	router.GET("/api/getShortUrl/:originalUrl", controllers.GetShortUrl)
+
 	router.Run("127.0.0.1:80")
 }
